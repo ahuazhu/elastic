@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -38,6 +39,7 @@ type CountService struct {
 	terminateAfter         *int
 	bodyJson               interface{}
 	bodyString             string
+	headers                http.Header
 }
 
 // NewCountService creates a new CountService.
@@ -172,6 +174,10 @@ func (s *CountService) Pretty(pretty bool) *CountService {
 	return s
 }
 
+func (s *CountService) Headers(headers http.Header) *CountService {
+	s.headers = headers
+	return s
+}
 // BodyJson specifies the query to restrict the results specified with the
 // Query DSL (optional). The interface{} will be serialized to a JSON document,
 // so use a map[string]interface{}.
@@ -302,6 +308,7 @@ func (s *CountService) Do(ctx context.Context) (int64, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return 0, err

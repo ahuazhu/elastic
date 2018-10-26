@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -42,6 +43,7 @@ type BulkService struct {
 	// estimated bulk size in bytes, up to the request index sizeInBytesCursor
 	sizeInBytes       int64
 	sizeInBytesCursor int
+	headers           http.Header 
 }
 
 // NewBulkService initializes a new BulkService.
@@ -138,6 +140,13 @@ func (s *BulkService) Add(requests ...BulkableRequest) *BulkService {
 	return s
 }
 
+
+// Headders add headers 
+func (b *BulkService) Headers(headers http.Header) *UpdateService {
+	b.headers = headers
+	return b
+}
+
 // EstimatedSizeInBytes returns the estimated size of all bulkable
 // requests added via Add.
 func (s *BulkService) EstimatedSizeInBytes() int64 {
@@ -187,6 +196,8 @@ func (s *BulkService) bodyAsString() (string, error) {
 
 	return buf.String(), nil
 }
+
+
 
 // Do sends the batched requests to Elasticsearch. Note that, when successful,
 // you can reuse the BulkService for the next batch as the list of bulk
@@ -254,6 +265,8 @@ func (s *BulkService) Do(ctx context.Context) (*BulkResponse, error) {
 		Body:        body,
 		ContentType: "application/x-ndjson",
 		Retrier:     s.retrier,
+		Headers:     headers,
+
 	})
 	if err != nil {
 		return nil, err

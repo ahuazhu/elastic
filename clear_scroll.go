@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 )
 
 // ClearScrollService clears one or more scroll contexts by their ids.
@@ -18,6 +19,7 @@ type ClearScrollService struct {
 	client   *Client
 	pretty   bool
 	scrollId []string
+	headers  http.Header
 }
 
 // NewClearScrollService creates a new ClearScrollService.
@@ -90,6 +92,7 @@ func (s *ClearScrollService) Do(ctx context.Context) (*ClearScrollResponse, erro
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

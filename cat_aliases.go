@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -26,6 +27,7 @@ type CatAliasesService struct {
 	aliases       []string
 	columns       []string
 	sort          []string // list of columns for sort order
+	headers		  http.Header
 }
 
 // NewCatAliasesService creates a new CatAliasesService.
@@ -79,6 +81,13 @@ func (s *CatAliasesService) Pretty(pretty bool) *CatAliasesService {
 	s.pretty = pretty
 	return s
 }
+
+
+func (s *CatAliasesService) Headers(headers http.Header) *CatAliasesService {
+	s.headers = headers
+	return s
+}
+
 
 // buildURL builds the URL for the operation.
 func (s *CatAliasesService) buildURL() (string, url.Values, error) {
@@ -134,6 +143,7 @@ func (s *CatAliasesService) Do(ctx context.Context) (CatAliasesResponse, error) 
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

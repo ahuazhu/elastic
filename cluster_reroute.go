@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"net/http"
 )
 
 // ClusterRerouteService allows for manual changes to the allocation of
@@ -30,6 +31,7 @@ type ClusterRerouteService struct {
 	timeout       string
 	commands      []AllocationCommand
 	body          interface{}
+	headers       http.Header
 }
 
 // NewClusterRerouteService creates a new ClusterRerouteService.
@@ -83,6 +85,11 @@ func (s *ClusterRerouteService) Timeout(timeout string) *ClusterRerouteService {
 // Pretty indicates that the JSON response be indented and human readable.
 func (s *ClusterRerouteService) Pretty(pretty bool) *ClusterRerouteService {
 	s.pretty = pretty
+	return s
+}
+
+func (s *ClusterRerouteService) Headers(headers http.Header) *ClusterRerouteService {
+	s.headers = headers
 	return s
 }
 
@@ -181,6 +188,7 @@ func (s *ClusterRerouteService) Do(ctx context.Context) (*ClusterRerouteResponse
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

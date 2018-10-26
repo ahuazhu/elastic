@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -29,6 +30,7 @@ type ClusterHealthService struct {
 	waitForNodes              string
 	waitForNoRelocatingShards *bool
 	waitForStatus             string
+	headers					  http.Header
 }
 
 // NewClusterHealthService creates a new ClusterHealthService.
@@ -183,6 +185,7 @@ func (s *ClusterHealthService) Do(ctx context.Context) (*ClusterHealthResponse, 
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		headers: headers,
 	})
 	if err != nil {
 		return nil, err

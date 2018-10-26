@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -38,6 +39,7 @@ type UpdateService struct {
 	doc                 interface{}
 	timeout             string
 	pretty              bool
+	headers             http.Header
 }
 
 // NewUpdateService creates the service to update documents in Elasticsearch.
@@ -176,6 +178,7 @@ func (b *UpdateService) Pretty(pretty bool) *UpdateService {
 	return b
 }
 
+
 // FetchSource asks Elasticsearch to return the updated _source in the response.
 func (s *UpdateService) FetchSource(fetchSource bool) *UpdateService {
 	if s.fsc == nil {
@@ -192,6 +195,13 @@ func (s *UpdateService) FetchSourceContext(fetchSourceContext *FetchSourceContex
 	s.fsc = fetchSourceContext
 	return s
 }
+
+// Headders add headers 
+func (b *UpdateService) Headers(headers http.Header) *UpdateService {
+	b.headers = headers
+	return b
+}
+
 
 // url returns the URL part of the document request.
 func (b *UpdateService) url() (string, url.Values, error) {
@@ -301,6 +311,7 @@ func (b *UpdateService) Do(ctx context.Context) (*UpdateResponse, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: header
 	})
 	if err != nil {
 		return nil, err

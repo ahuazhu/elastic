@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -63,6 +64,7 @@ type DeleteByQueryService struct {
 	waitForActiveShards    string
 	waitForCompletion      *bool
 	pretty                 bool
+	headers                http.Header
 }
 
 // NewDeleteByQueryService creates a new DeleteByQueryService.
@@ -419,6 +421,10 @@ func (s *DeleteByQueryService) Pretty(pretty bool) *DeleteByQueryService {
 	return s
 }
 
+func (s *DeleteByQueryService) Headers(headers http.Header) *DeleteByQueryService {
+	s.headers = headers
+	return s
+}
 // Body specifies the body of the request. It overrides data being specified via SearchService.
 func (s *DeleteByQueryService) Body(body string) *DeleteByQueryService {
 	s.body = body
@@ -620,6 +626,7 @@ func (s *DeleteByQueryService) Do(ctx context.Context) (*BulkIndexByScrollRespon
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

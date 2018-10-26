@@ -31,6 +31,7 @@ type DeleteService struct {
 	waitForActiveShards string
 	parent              string
 	refresh             string
+	header              http.Header
 }
 
 // NewDeleteService creates a new DeleteService.
@@ -110,6 +111,10 @@ func (s *DeleteService) Refresh(refresh string) *DeleteService {
 // Pretty indicates that the JSON response be indented and human readable.
 func (s *DeleteService) Pretty(pretty bool) *DeleteService {
 	s.pretty = pretty
+	return s
+}
+func (s *DeleteService) Headers(headers http.Header) *DeleteService {
+	s.headers = headers
 	return s
 }
 
@@ -193,6 +198,7 @@ func (s *DeleteService) Do(ctx context.Context) (*DeleteResponse, error) {
 		Path:         path,
 		Params:       params,
 		IgnoreErrors: []int{http.StatusNotFound},
+		Headers:      headers,
 	})
 	if err != nil {
 		return nil, err

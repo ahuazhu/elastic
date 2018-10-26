@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -28,6 +29,7 @@ type ClusterStateService struct {
 	ignoreUnavailable *bool
 	local             *bool
 	masterTimeout     string
+	headers           http.Header
 }
 
 // NewClusterStateService creates a new ClusterStateService.
@@ -101,6 +103,12 @@ func (s *ClusterStateService) Pretty(pretty bool) *ClusterStateService {
 	return s
 }
 
+func (s *ClusterStateService) Headers(headers http.Header) *ClusterStateService {
+	s.headers = headers
+	return s
+}
+
+
 // buildURL builds the URL for the operation.
 func (s *ClusterStateService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -169,6 +177,7 @@ func (s *ClusterStateService) Do(ctx context.Context) (*ClusterStateResponse, er
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers
 	})
 	if err != nil {
 		return nil, err

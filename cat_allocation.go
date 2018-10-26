@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -27,6 +28,7 @@ type CatAllocationService struct {
 	nodes         []string
 	columns       []string
 	sort          []string // list of columns for sort order
+	headers		  http.Header
 }
 
 // NewCatAllocationService creates a new CatAllocationService.
@@ -88,6 +90,12 @@ func (s *CatAllocationService) Pretty(pretty bool) *CatAllocationService {
 	return s
 }
 
+// Pretty indicates that the JSON response be indented and human readable.
+func (s *CatAllocationService) Headers(headers http.Header) *CatAllocationService {
+	s.headers = headers
+	return s
+}
+
 // buildURL builds the URL for the operation.
 func (s *CatAllocationService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -145,6 +153,7 @@ func (s *CatAllocationService) Do(ctx context.Context) (CatAllocationResponse, e
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

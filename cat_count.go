@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -26,6 +27,7 @@ type CatCountService struct {
 	masterTimeout string
 	columns       []string
 	sort          []string // list of columns for sort order
+	headers		  http.Header
 }
 
 // NewCatCountService creates a new CatCountService.
@@ -135,6 +137,7 @@ func (s *CatCountService) Do(ctx context.Context) (CatCountResponse, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		headers: headers,
 	})
 	if err != nil {
 		return nil, err

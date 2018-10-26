@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -21,6 +22,7 @@ type ClusterStatsService struct {
 	nodeId       []string
 	flatSettings *bool
 	human        *bool
+	headers      http.Header
 }
 
 // NewClusterStatsService creates a new ClusterStatsService.
@@ -54,6 +56,12 @@ func (s *ClusterStatsService) Pretty(pretty bool) *ClusterStatsService {
 	s.pretty = pretty
 	return s
 }
+
+func (s *ClusterStatsService) Headers(headers http.Header) *ClusterStatsService {
+	s.headers = headers
+	return s
+}
+
 
 // buildURL builds the URL for the operation.
 func (s *ClusterStatsService) buildURL() (string, url.Values, error) {
@@ -112,6 +120,7 @@ func (s *ClusterStatsService) Do(ctx context.Context) (*ClusterStatsResponse, er
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

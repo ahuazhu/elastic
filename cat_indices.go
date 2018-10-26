@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -29,6 +30,7 @@ type CatIndicesService struct {
 	health        string   // green, yellow, or red
 	primaryOnly   *bool    // true for primary shards only
 	sort          []string // list of columns for sort order
+	headers       http.Header
 }
 
 // NewCatIndicesService creates a new CatIndicesService.
@@ -103,6 +105,12 @@ func (s *CatIndicesService) Pretty(pretty bool) *CatIndicesService {
 	return s
 }
 
+func (s *CatIndicesService) Headers(headers http.Header) *CatIndicesService {
+	s.headers = headers
+	return s
+}
+
+
 // buildURL builds the URL for the operation.
 func (s *CatIndicesService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -166,6 +174,7 @@ func (s *CatIndicesService) Do(ctx context.Context) (CatIndicesResponse, error) 
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

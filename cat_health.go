@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 )
 
@@ -24,6 +25,7 @@ type CatHealthService struct {
 	columns             []string
 	sort                []string // list of columns for sort order
 	disableTimestamping *bool
+	headers             http.Header
 }
 
 // NewCatHealthService creates a new CatHealthService.
@@ -121,6 +123,7 @@ func (s *CatHealthService) Do(ctx context.Context) (CatHealthResponse, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers
 	})
 	if err != nil {
 		return nil, err
