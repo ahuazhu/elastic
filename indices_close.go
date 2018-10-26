@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -25,6 +26,7 @@ type IndicesCloseService struct {
 	ignoreUnavailable *bool
 	allowNoIndices    *bool
 	expandWildcards   string
+	headers           http.Header
 }
 
 // NewIndicesCloseService creates and initializes a new IndicesCloseService.
@@ -74,6 +76,11 @@ func (s *IndicesCloseService) ExpandWildcards(expandWildcards string) *IndicesCl
 // Pretty indicates that the JSON response be indented and human readable.
 func (s *IndicesCloseService) Pretty(pretty bool) *IndicesCloseService {
 	s.pretty = pretty
+	return s
+}
+
+func (s *IndicesCloseService) Headers(headers http.Header) *IndicesCloseService {
+	s.headers = headers
 	return s
 }
 
@@ -138,6 +145,7 @@ func (s *IndicesCloseService) Do(ctx context.Context) (*IndicesCloseResponse, er
 		Method: "POST",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

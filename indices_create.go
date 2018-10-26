@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"net/url"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -24,6 +25,7 @@ type IndicesCreateService struct {
 	masterTimeout string
 	bodyJson      interface{}
 	bodyString    string
+	headers       http.Header
 }
 
 // NewIndicesCreateService returns a new IndicesCreateService.
@@ -75,6 +77,11 @@ func (b *IndicesCreateService) Pretty(pretty bool) *IndicesCreateService {
 	return b
 }
 
+func (b *IndicesCreateService) Headers(headers http.Header) *IndicesCreateService {
+	b.headers = headers
+	return b
+}
+
 // Do executes the operation.
 func (b *IndicesCreateService) Do(ctx context.Context) (*IndicesCreateResult, error) {
 	if b.index == "" {
@@ -114,6 +121,7 @@ func (b *IndicesCreateService) Do(ctx context.Context) (*IndicesCreateResult, er
 		Path:   path,
 		Params: params,
 		Body:   body,
+		headers: headers,
 	})
 	if err != nil {
 		return nil, err

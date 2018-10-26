@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -28,6 +29,7 @@ type IndicesFlushService struct {
 	ignoreUnavailable *bool
 	allowNoIndices    *bool
 	expandWildcards   string
+	headers           http.Header
 }
 
 // NewIndicesFlushService creates a new IndicesFlushService.
@@ -87,6 +89,11 @@ func (s *IndicesFlushService) ExpandWildcards(expandWildcards string) *IndicesFl
 // Pretty indicates that the JSON response be indented and human readable.
 func (s *IndicesFlushService) Pretty(pretty bool) *IndicesFlushService {
 	s.pretty = pretty
+	return s
+}
+
+func (s *IndicesFlushService) Headers(headers http.Header) *IndicesFlushService {
+	s.headers = headers
 	return s
 }
 
@@ -153,6 +160,7 @@ func (s *IndicesFlushService) Do(ctx context.Context) (*IndicesFlushResponse, er
 		Method: "POST",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

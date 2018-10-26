@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -39,6 +40,7 @@ type ExplainService struct {
 	source                 string
 	bodyJson               interface{}
 	bodyString             string
+	headers                http.Header
 }
 
 // NewExplainService creates a new ExplainService.
@@ -168,6 +170,10 @@ func (s *ExplainService) Pretty(pretty bool) *ExplainService {
 	return s
 }
 
+func (s *ExplainService) Headers(headers http.Header) *ExplainService {
+	s.headers = headers
+	return s
+}
 // Query sets a query definition using the Query DSL.
 func (s *ExplainService) Query(query Query) *ExplainService {
 	src, err := query.Source()
@@ -303,6 +309,7 @@ func (s *ExplainService) Do(ctx context.Context) (*ExplainResponse, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

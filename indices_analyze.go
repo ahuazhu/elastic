@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -26,6 +27,7 @@ type IndicesAnalyzeService struct {
 	preferLocal *bool
 	bodyJson    interface{}
 	bodyString  string
+	headers     http.Header
 }
 
 // NewIndicesAnalyzeService creates a new IndicesAnalyzeService.
@@ -120,6 +122,11 @@ func (s *IndicesAnalyzeService) Pretty(pretty bool) *IndicesAnalyzeService {
 	return s
 }
 
+func (s *IndicesAnalyzeService) Headers(headers http.Header) *IndicesAnalyzeService {
+	s.headers = headers
+	return s
+}
+
 // BodyJson is the text on which the analysis should be performed.
 func (s *IndicesAnalyzeService) BodyJson(body interface{}) *IndicesAnalyzeService {
 	s.bodyJson = body
@@ -194,6 +201,7 @@ func (s *IndicesAnalyzeService) Do(ctx context.Context) (*IndicesAnalyzeResponse
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

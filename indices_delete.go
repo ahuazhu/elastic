@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -23,6 +24,7 @@ type IndicesDeleteService struct {
 	index         []string
 	timeout       string
 	masterTimeout string
+	headers       http.Header
 }
 
 // NewIndicesDeleteService creates and initializes a new IndicesDeleteService.
@@ -57,6 +59,12 @@ func (s *IndicesDeleteService) Pretty(pretty bool) *IndicesDeleteService {
 	s.pretty = pretty
 	return s
 }
+
+func (s *IndicesDeleteService) Headers(headers http.Header) *IndicesDeleteService {
+	s.headers = headers
+	return s
+}
+
 
 // buildURL builds the URL for the operation.
 func (s *IndicesDeleteService) buildURL() (string, url.Values, error) {
@@ -112,6 +120,7 @@ func (s *IndicesDeleteService) Do(ctx context.Context) (*IndicesDeleteResponse, 
 		Method: "DELETE",
 		Path:   path,
 		Params: params,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err

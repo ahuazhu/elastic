@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -35,6 +36,7 @@ type GetService struct {
 	versionType                   string
 	parent                        string
 	ignoreErrorsOnGeneratedFields *bool
+	headers                       http.Header
 }
 
 // NewGetService creates a new GetService.
@@ -142,6 +144,11 @@ func (s *GetService) Pretty(pretty bool) *GetService {
 	return s
 }
 
+func (s *GetService) Headers(headers http.Header) *GetService {
+	s.headers = headers
+	return s
+}
+
 // Validate checks if the operation is valid.
 func (s *GetService) Validate() error {
 	var invalid []string
@@ -230,6 +237,7 @@ func (s *GetService) Do(ctx context.Context) (*GetResult, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: headers
 	})
 	if err != nil {
 		return nil, err

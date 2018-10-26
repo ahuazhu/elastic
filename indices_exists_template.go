@@ -21,6 +21,7 @@ type IndicesExistsTemplateService struct {
 	pretty bool
 	name   string
 	local  *bool
+	headers http.Header
 }
 
 // NewIndicesExistsTemplateService creates a new IndicesExistsTemplateService.
@@ -46,6 +47,11 @@ func (s *IndicesExistsTemplateService) Local(local bool) *IndicesExistsTemplateS
 // Pretty indicates that the JSON response be indented and human readable.
 func (s *IndicesExistsTemplateService) Pretty(pretty bool) *IndicesExistsTemplateService {
 	s.pretty = pretty
+	return s
+}
+
+func (s *IndicesExistsTemplateService) Headers(headers http.Header) *IndicesExistsTemplateService {
+	s.headers = headers
 	return s
 }
 
@@ -100,7 +106,8 @@ func (s *IndicesExistsTemplateService) Do(ctx context.Context) (bool, error) {
 		Method:       "HEAD",
 		Path:         path,
 		Params:       params,
-		IgnoreErrors: []int{404},
+		IgnoreErrors: []int{404}, 
+		Headers:      headers,
 	})
 	if err != nil {
 		return false, err

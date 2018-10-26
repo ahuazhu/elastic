@@ -27,6 +27,7 @@ type IndicesExistsTypeService struct {
 	local             *bool
 	ignoreUnavailable *bool
 	allowNoIndices    *bool
+	headers           http.Header
 }
 
 // NewIndicesExistsTypeService creates a new IndicesExistsTypeService.
@@ -83,6 +84,10 @@ func (s *IndicesExistsTypeService) Pretty(pretty bool) *IndicesExistsTypeService
 	return s
 }
 
+func (s *IndicesExistsTypeService) Headers(headers http.Header) *IndicesExistsTypeService {
+	s.headers = headers
+	return s
+}
 // buildURL builds the URL for the operation.
 func (s *IndicesExistsTypeService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -148,6 +153,7 @@ func (s *IndicesExistsTypeService) Do(ctx context.Context) (bool, error) {
 		Path:         path,
 		Params:       params,
 		IgnoreErrors: []int{404},
+		Headers:      headers,
 	})
 	if err != nil {
 		return false, err

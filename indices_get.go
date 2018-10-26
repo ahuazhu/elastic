@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/headers"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
@@ -28,6 +29,7 @@ type IndicesGetService struct {
 	expandWildcards   string
 	flatSettings      *bool
 	human             *bool
+	headers           http.Header
 }
 
 // NewIndicesGetService creates a new IndicesGetService.
@@ -100,6 +102,10 @@ func (s *IndicesGetService) Pretty(pretty bool) *IndicesGetService {
 	return s
 }
 
+func (s *IndicesGetService) Headers(headers http.Header) *IndicesGetService {
+	s.headers = headers
+	return s
+}
 // buildURL builds the URL for the operation.
 func (s *IndicesGetService) buildURL() (string, url.Values, error) {
 	var err error

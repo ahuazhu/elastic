@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 
 	"github.com/olivere/elastic/uritemplates"
 )
@@ -36,6 +37,7 @@ type IndexService struct {
 	pipeline            string
 	bodyJson            interface{}
 	bodyString          string
+	headers             http.Header
 }
 
 // NewIndexService creates a new IndexService.
@@ -148,6 +150,11 @@ func (s *IndexService) Pretty(pretty bool) *IndexService {
 	return s
 }
 
+func (s *IndexService) Headers(headers http.Header) *IndexService {
+	s.headers = headers
+	return s
+}
+
 // BodyJson is the document as a serializable JSON interface.
 func (s *IndexService) BodyJson(body interface{}) *IndexService {
 	s.bodyJson = body
@@ -180,6 +187,7 @@ func (s *IndexService) buildURL() (string, string, url.Values, error) {
 		path, err = uritemplates.Expand("/{index}/{type}/", map[string]string{
 			"index": s.index,
 			"type":  s.typ,
+
 		})
 	}
 	if err != nil {
@@ -272,6 +280,7 @@ func (s *IndexService) Do(ctx context.Context) (*IndexResponse, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
+		Headers: headers,
 	})
 	if err != nil {
 		return nil, err
