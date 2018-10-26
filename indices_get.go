@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"net/headers"
+	"net/http"
 	"strings"
 
 	"github.com/olivere/elastic/uritemplates"
