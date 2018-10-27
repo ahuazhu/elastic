@@ -308,7 +308,7 @@ func (s *CountService) Do(ctx context.Context) (int64, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return 0, err

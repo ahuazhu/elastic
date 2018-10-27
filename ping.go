@@ -23,6 +23,7 @@ type PingService struct {
 	timeout      string
 	httpHeadOnly bool
 	pretty       bool
+	
 }
 
 // PingResult is the result returned from querying the Elasticsearch server.

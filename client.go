@@ -137,6 +137,7 @@ type Client struct {
 	gzipEnabled               bool            // gzip compression enabled or disabled (default)
 	requiredPlugins           []string        // list of required plugins
 	retrier                   Retrier         // strategy for retries
+	headers                   http.Header
 }
 
 // NewClient creates a new client to work with Elasticsearch.

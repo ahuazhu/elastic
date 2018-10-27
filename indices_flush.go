@@ -160,7 +160,7 @@ func (s *IndicesFlushService) Do(ctx context.Context) (*IndicesFlushResponse, er
 		Method: "POST",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

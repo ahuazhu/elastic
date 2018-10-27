@@ -30,7 +30,6 @@ type Highlight struct {
 	options               map[string]interface{}
 	forceSource           *bool
 	useExplicitFieldOrder bool
-	headers               http.Header
 }
 
 func NewHighlight() *Highlight {

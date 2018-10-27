@@ -143,7 +143,7 @@ func (s *CatAliasesService) Do(ctx context.Context) (CatAliasesResponse, error) 
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

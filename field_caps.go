@@ -163,7 +163,7 @@ func (s *FieldCapsService) Do(ctx context.Context) (*FieldCapsResponse, error) {
 		Params:       params,
 		Body:         body,
 		IgnoreErrors: []int{http.StatusNotFound},
-		Headers:      headers,
+		Headers:      s.headers,
 	})
 	if err != nil {
 		return nil, err

@@ -131,6 +131,12 @@ func (s *BulkService) Pretty(pretty bool) *BulkService {
 	return s
 }
 
+func (s *BulkService) Headers(headers http.Header) *BulkService {
+	s.headers = headers
+	return s
+}
+
+
 // Add adds bulkable requests, i.e. BulkIndexRequest, BulkUpdateRequest,
 // and/or BulkDeleteRequest.
 func (s *BulkService) Add(requests ...BulkableRequest) *BulkService {
@@ -140,12 +146,6 @@ func (s *BulkService) Add(requests ...BulkableRequest) *BulkService {
 	return s
 }
 
-
-// Headders add headers 
-func (b *BulkService) Headers(headers http.Header) *UpdateService {
-	b.headers = headers
-	return b
-}
 
 // EstimatedSizeInBytes returns the estimated size of all bulkable
 // requests added via Add.
@@ -263,10 +263,9 @@ func (s *BulkService) Do(ctx context.Context) (*BulkResponse, error) {
 		Path:        path,
 		Params:      params,
 		Body:        body,
-		ContentType: "application/x-ndjson",
+		ContentType: "application/json",
 		Retrier:     s.retrier,
-		Headers:     headers,
-
+		Headers:     s.headers,
 	})
 	if err != nil {
 		return nil, err

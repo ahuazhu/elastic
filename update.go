@@ -179,6 +179,13 @@ func (b *UpdateService) Pretty(pretty bool) *UpdateService {
 }
 
 
+// Pretty instructs to return human readable, prettified JSON.
+func (b *UpdateService) Headers(headers http.Header) *UpdateService {
+	b.headers = headers
+	return b
+}
+
+
 // FetchSource asks Elasticsearch to return the updated _source in the response.
 func (s *UpdateService) FetchSource(fetchSource bool) *UpdateService {
 	if s.fsc == nil {
@@ -194,12 +201,6 @@ func (s *UpdateService) FetchSource(fetchSource bool) *UpdateService {
 func (s *UpdateService) FetchSourceContext(fetchSourceContext *FetchSourceContext) *UpdateService {
 	s.fsc = fetchSourceContext
 	return s
-}
-
-// Headders add headers 
-func (b *UpdateService) Headers(headers http.Header) *UpdateService {
-	b.headers = headers
-	return b
 }
 
 
@@ -311,7 +312,7 @@ func (b *UpdateService) Do(ctx context.Context) (*UpdateResponse, error) {
 		Path:   path,
 		Params: params,
 		Body:   body,
-		Headers: header
+		Headers: b.headers,
 	})
 	if err != nil {
 		return nil, err

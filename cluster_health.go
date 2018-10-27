@@ -114,6 +114,11 @@ func (s *ClusterHealthService) Pretty(pretty bool) *ClusterHealthService {
 	return s
 }
 
+func (s *ClusterHealthService) Headers(headers http.Header) *ClusterHealthService {
+	s.headers = headers
+	return s
+}
+
 // buildURL builds the URL for the operation.
 func (s *ClusterHealthService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -185,7 +190,7 @@ func (s *ClusterHealthService) Do(ctx context.Context) (*ClusterHealthResponse, 
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

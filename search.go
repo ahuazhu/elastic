@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"net/http"
 	"reflect"
 	"strings"
 
@@ -32,6 +33,7 @@ type SearchService struct {
 	allowNoIndices    *bool
 	expandWildcards   string
 	maxResponseSize   int64
+	headers           http.Header
 }
 
 // NewSearchService creates a new service for searching in Elasticsearch.
@@ -85,6 +87,10 @@ func (s *SearchService) Pretty(pretty bool) *SearchService {
 	return s
 }
 
+func (s *SearchService) Headers(headers http.Header) *SearchService {
+	s.headers = headers
+	return s
+}
 // Timeout sets the timeout to use, e.g. "1s" or "1000ms".
 func (s *SearchService) Timeout(timeout string) *SearchService {
 	s.searchSource = s.searchSource.Timeout(timeout)
@@ -412,6 +418,7 @@ func (s *SearchService) Do(ctx context.Context) (*SearchResult, error) {
 		Params:          params,
 		Body:            body,
 		MaxResponseSize: s.maxResponseSize,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

@@ -133,7 +133,7 @@ func (s *IndicesSyncedFlushService) Do(ctx context.Context) (*IndicesSyncedFlush
 		Method: "POST",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

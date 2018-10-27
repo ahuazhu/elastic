@@ -120,7 +120,7 @@ func (s *IndicesDeleteService) Do(ctx context.Context) (*IndicesDeleteResponse, 
 		Method: "DELETE",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

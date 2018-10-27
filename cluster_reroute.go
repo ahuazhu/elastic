@@ -188,7 +188,7 @@ func (s *ClusterRerouteService) Do(ctx context.Context) (*ClusterRerouteResponse
 		Path:   path,
 		Params: params,
 		Body:   body,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

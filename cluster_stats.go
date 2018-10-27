@@ -120,7 +120,7 @@ func (s *ClusterStatsService) Do(ctx context.Context) (*ClusterStatsResponse, er
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

@@ -80,6 +80,10 @@ func (s *CatHealthService) Pretty(pretty bool) *CatHealthService {
 	return s
 }
 
+func (s *CatHealthService) Headers(headers http.Header) *CatHealthService {
+	s.headers = headers
+	return s
+}
 // buildURL builds the URL for the operation.
 func (s *CatHealthService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -123,7 +127,7 @@ func (s *CatHealthService) Do(ctx context.Context) (CatHealthResponse, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

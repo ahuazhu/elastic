@@ -174,7 +174,7 @@ func (s *CatIndicesService) Do(ctx context.Context) (CatIndicesResponse, error) 
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

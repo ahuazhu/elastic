@@ -31,7 +31,7 @@ type DeleteService struct {
 	waitForActiveShards string
 	parent              string
 	refresh             string
-	header              http.Header
+	headers              http.Header
 }
 
 // NewDeleteService creates a new DeleteService.
@@ -198,7 +198,7 @@ func (s *DeleteService) Do(ctx context.Context) (*DeleteResponse, error) {
 		Path:         path,
 		Params:       params,
 		IgnoreErrors: []int{http.StatusNotFound},
-		Headers:      headers,
+		Headers:      s.headers,
 	})
 	if err != nil {
 		return nil, err

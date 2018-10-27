@@ -173,7 +173,7 @@ func (s *ExistsService) Do(ctx context.Context) (bool, error) {
 		Path:         path,
 		Params:       params,
 		IgnoreErrors: []int{404},
-		Headers:      headers,
+		Headers:      s.headers,
 	})
 	if err != nil {
 		return false, err

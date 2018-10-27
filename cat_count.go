@@ -83,6 +83,11 @@ func (s *CatCountService) Pretty(pretty bool) *CatCountService {
 	return s
 }
 
+func (s *CatCountService) Headers(headers http.Header) *CatCountService {
+	s.headers = headers
+	return s
+}
+
 // buildURL builds the URL for the operation.
 func (s *CatCountService) buildURL() (string, url.Values, error) {
 	// Build URL
@@ -137,7 +142,7 @@ func (s *CatCountService) Do(ctx context.Context) (CatCountResponse, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

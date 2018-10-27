@@ -115,7 +115,7 @@ func (s *IndicesDeleteTemplateService) Do(ctx context.Context) (*IndicesDeleteTe
 		Method: "DELETE",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 		
 	})
 	if err != nil {

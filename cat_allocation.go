@@ -153,7 +153,7 @@ func (s *CatAllocationService) Do(ctx context.Context) (CatAllocationResponse, e
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

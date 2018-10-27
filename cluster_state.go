@@ -177,7 +177,7 @@ func (s *ClusterStateService) Do(ctx context.Context) (*ClusterStateResponse, er
 		Method: "GET",
 		Path:   path,
 		Params: params,
-		Headers: headers
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

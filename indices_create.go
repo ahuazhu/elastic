@@ -121,7 +121,7 @@ func (b *IndicesCreateService) Do(ctx context.Context) (*IndicesCreateResult, er
 		Path:   path,
 		Params: params,
 		Body:   body,
-		headers: headers,
+		Headers: b.headers,
 	})
 	if err != nil {
 		return nil, err

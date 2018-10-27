@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"net/url"
+	"net/http"
 	"strings"
 	"time"
 
@@ -24,6 +25,7 @@ type NodesInfoService struct {
 	metric       []string
 	flatSettings *bool
 	human        *bool
+	headers      http.Header
 }
 
 // NewNodesInfoService creates a new NodesInfoService.
@@ -66,6 +68,11 @@ func (s *NodesInfoService) Human(human bool) *NodesInfoService {
 // Pretty indicates whether to indent the returned JSON.
 func (s *NodesInfoService) Pretty(pretty bool) *NodesInfoService {
 	s.pretty = pretty
+	return s
+}
+
+func (s *NodesInfoService) Headers(headers http.Header) *NodesInfoService {
+	s.headers = headers
 	return s
 }
 
@@ -117,6 +124,7 @@ func (s *NodesInfoService) Do(ctx context.Context) (*NodesInfoResponse, error) {
 		Method: "GET",
 		Path:   path,
 		Params: params,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

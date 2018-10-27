@@ -92,7 +92,7 @@ func (s *ClearScrollService) Do(ctx context.Context) (*ClearScrollResponse, erro
 		Path:   path,
 		Params: params,
 		Body:   body,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

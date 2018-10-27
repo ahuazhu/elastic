@@ -201,7 +201,7 @@ func (s *IndicesAnalyzeService) Do(ctx context.Context) (*IndicesAnalyzeResponse
 		Path:   path,
 		Params: params,
 		Body:   body,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err

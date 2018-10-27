@@ -145,7 +145,7 @@ func (s *IndicesCloseService) Do(ctx context.Context) (*IndicesCloseResponse, er
 		Method: "POST",
 		Path:   path,
 		Params: params,
-		Headers: headers,
+		Headers: s.headers,
 	})
 	if err != nil {
 		return nil, err
